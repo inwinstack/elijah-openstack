@@ -72,10 +72,10 @@ class CloudletActionController(wsgi.Controller):
         dest_ip = None
         for node in compute_nodes:
             # node_name = node.get('hypervisor_hostname', None)
-	    node_name = node.hypervisor_hostname
+            node_name = node.hypervisor_hostname
             if str(node_name) == str(instance_hostname):
                 # dest_ip = node.get('host_ip', None)
-		dest_ip = node.host_ip
+                dest_ip = node.host_ip
 
         # set port forwarding
         if dest_ip:
@@ -162,8 +162,11 @@ class CloudletActionController(wsgi.Controller):
         context = req.environ['nova.context']
         payload = body['cloudlet-handoff']
         handoff_url = payload.get("handoff_url", None)
+        glance_url = payload.get("glance_url", None)
+        neutron_url = payload.get("neutron_url", None)
         dest_token = payload.get("dest_token", None)
         dest_vmname = payload.get("dest_vmname", None)
+        dest_network = payload.get("dest_network", None)
         if handoff_url is None:
             msg = _("Need Handoff URL")
             raise exc.HTTPBadRequest(explanation=msg)
@@ -191,8 +194,11 @@ class CloudletActionController(wsgi.Controller):
         residue_id = self.cloudlet_api.cloudlet_handoff(context,
                                                         instance,
                                                         handoff_url,
+                                                        glance_url,
+                                                        neutron_url,
                                                         dest_token=dest_token,
-                                                        dest_vmname=dest_vmname)
+                                                        dest_vmname=dest_vmname,
+                                                        dest_network=dest_network)
         if residue_id:
             return {'handoff': "%s" % residue_id}
         else:
