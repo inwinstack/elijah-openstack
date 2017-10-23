@@ -198,6 +198,7 @@ class CloudletActionController(wsgi.Controller):
                                                         glance_url,
                                                         neutron_url,
                                                         dest_token=dest_token,
+                                                        dest_project_id=dest_project_id,
                                                         dest_vmname=dest_vmname,
                                                         dest_network=dest_network)
         if residue_id:

@@ -347,8 +347,8 @@ class CloudletAPI(nova_rpc.ComputeAPI):
             raise HandoffError(msg)
 
         # find matching networking using network api v2.0
-        newtork_list = self._get_server_info(neutron_url, dest_token, "networks", "v2.0")
-        for network_item in newtork_list:
+        network_list = self._get_server_info(neutron_url, dest_token, "networks", "v2.0")
+        for network_item in network_list:
             if network_item['project_id'] != dest_project_id:
                 continue
             network_uuid = None
