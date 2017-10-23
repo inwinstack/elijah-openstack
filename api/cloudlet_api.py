@@ -260,7 +260,8 @@ class CloudletAPI(nova_rpc.ComputeAPI):
     @nova_api.check_instance_state(vm_state=[vm_states.ACTIVE])
     def cloudlet_handoff(self, context, instance, handoff_url,
                          glance_url, neutron_url, dest_token=None,
-                         dest_vmname=None, dest_network=None, extra_properties=None):
+                         dest_project_id=None, dest_vmname=None, dest_network=None,
+                         extra_properties=None):
         project_id, user_id = quotas_obj.ids_from_instance(context, instance)
         original_task_state = instance.task_state
         quotas = self._create_reservations(context, instance, original_task_state, project_id, user_id)
@@ -290,6 +291,7 @@ class CloudletAPI(nova_rpc.ComputeAPI):
                                                    urlparse(neutron_url),
                                                    dest_token,
                                                    instance,
+                                                   dest_project_id,
                                                    dest_vmname,
                                                    dest_network)
             # parse handoff URL from the return
@@ -314,7 +316,7 @@ class CloudletAPI(nova_rpc.ComputeAPI):
 
     def _prepare_handoff_dest(self, end_point, glance_url,
                               neutron_url, dest_token, instance,
-                              dest_vmname=None, dest_network=None):
+                              dest_project_id=None, dest_vmname=None, dest_network=None):
         # information of current VM at source
         if dest_vmname:
             instance_name = dest_vmname
@@ -326,7 +328,7 @@ class CloudletAPI(nova_rpc.ComputeAPI):
         original_overlay_url = \
             instance.get("metadata", dict()).get("overlay_url", None)
 
-        # testing image api v2
+        # find matching base vm using image api v2
         image_list = self._get_server_info(glance_url, dest_token, "images", "v2")
         basevm_uuid = None
         for image_item in image_list:
@@ -344,10 +346,10 @@ class CloudletAPI(nova_rpc.ComputeAPI):
                   (str(requested_basevm_id), end_point.netloc)
             raise HandoffError(msg)
 
-        # testing networking api v2.0
+        # find matching networking using network api v2.0
         newtork_list = self._get_server_info(neutron_url, dest_token, "networks", "v2.0")
         for network_item in newtork_list:
-            if network_item['project_id'] != instance.project_id:
+            if network_item['project_id'] != dest_project_id:
                 continue
             network_uuid = None
             if network_item['name'] == dest_network:

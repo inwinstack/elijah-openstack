@@ -165,6 +165,7 @@ class CloudletActionController(wsgi.Controller):
         glance_url = payload.get("glance_url", None)
         neutron_url = payload.get("neutron_url", None)
         dest_token = payload.get("dest_token", None)
+        dest_project_id = payload.get("dest_project_id", None)
         dest_vmname = payload.get("dest_vmname", None)
         dest_network = payload.get("dest_network", None)
         if handoff_url is None:
