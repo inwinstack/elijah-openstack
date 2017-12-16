@@ -205,20 +205,3 @@ class CloudletActionController(wsgi.Controller):
             return {'handoff': "%s" % residue_id}
         else:
             return {'handoff': "%s" % handoff_url}
-
-
-class Cloudlet(extensions.V21APIExtensionBase):
-    """Cloudlet compute API support."""
-
-    name = "Cloudlet"
-    alias = ALIAS
-    version = 1
-
-    def get_controller_extensions(self):
-        controller = CloudletActionController()
-        servers_extension = extensions.ControllerExtension(
-            self, 'servers', controller=controller)
-        return [servers_extension]
-
-    def get_resources(self):
-        return []

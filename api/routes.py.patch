@@ -1,0 +1,19 @@
+diff -Naur old/nova/api/openstack/compute/routes.py new/nova/api/openstack/compute/routes.py
+--- old/nova/api/openstack/compute/routes.py	2017-10-31 09:46:39.710563113 +0000
++++ new/nova/api/openstack/compute/routes.py	2017-10-31 09:46:29.598547450 +0000
+@@ -33,6 +33,7 @@
+ from nova.api.openstack.compute import console_output
+ from nova.api.openstack.compute import consoles
+ from nova.api.openstack.compute import create_backup
++from nova.api.openstack.compute import cloudlet
+ from nova.api.openstack.compute import deferred_delete
+ from nova.api.openstack.compute import evacuate
+ from nova.api.openstack.compute import extended_availability_zone
+@@ -292,6 +293,7 @@
+         admin_password.AdminPasswordController,
+         console_output.ConsoleOutputController,
+         create_backup.CreateBackupController,
++        cloudlet.CloudletActionController,
+         deferred_delete.DeferredDeleteController,
+         evacuate.EvacuateController,
+         floating_ips.FloatingIPActionController,

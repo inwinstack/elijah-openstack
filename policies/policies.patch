@@ -1,19 +1,27 @@
 diff -Naur old/nova/policies/__init__.py new/nova/policies/__init__.py
---- old/nova/policies/__init__.py	2017-07-12 17:39:37.775800734 +0000
-+++ new/nova/policies/__init__.py	2017-07-12 17:36:58.284517914 +0000
-@@ -99,6 +99,7 @@
- from nova.policies import virtual_interfaces
+--- old/nova/policies/__init__.py	2017-10-31 09:51:16.418876840 +0000
++++ new/nova/policies/__init__.py	2017-10-31 09:53:55.027078995 +0000
+@@ -29,6 +29,7 @@
+ from nova.policies import console_output
+ from nova.policies import consoles
+ from nova.policies import create_backup
++from nova.policies import cloudlet
+ from nova.policies import deferred_delete
+ from nova.policies import evacuate
+ from nova.policies import extended_availability_zone
+@@ -88,7 +89,6 @@
  from nova.policies import volumes
  from nova.policies import volumes_attachments
-+from nova.policies import cloudlet
- 
- 
+
+-
  def list_rules():
-@@ -188,5 +189,6 @@
-         versions.list_rules(),
-         virtual_interfaces.list_rules(),
-         volumes.list_rules(),
--        volumes_attachments.list_rules()
-+        volumes_attachments.list_rules(),
-+        cloudlet.list_rules()
-     )
+     return itertools.chain(
+         admin_actions.list_rules(),
+@@ -107,6 +107,7 @@
+         console_output.list_rules(),
+         consoles.list_rules(),
+         create_backup.list_rules(),
++        cloudlet.list_rules(),
+         deferred_delete.list_rules(),
+         evacuate.list_rules(),
+         extended_availability_zone.list_rules(),
